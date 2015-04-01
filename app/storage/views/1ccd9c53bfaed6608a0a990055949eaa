@@ -1,0 +1,46 @@
+<?php $__env->startSection('content'); ?>
+
+<div class="section">
+	    	<div class="container">
+	    		<div class="row">
+		    		<div class="col-sm-12 social-login">
+		    			<p>Ingreso al sistema</p>
+		    		</div>
+	    		</div>
+				<div class="row">
+					<div class="col-sm-offset-3 col-sm-5">
+						<?php echo Form::open(array('url' => 'login', 'method' => 'post')); ?>	
+						<div class="basic-login">
+							<form role="form" role="form">
+								<div class="form-group">
+		        				 	<label for="username"><i class="icon-user"></i> <b>Usuario</b></label>
+									<?php echo Form::text('username', Input::old('username'), array('class' => 'inputbox form-control', 'placeholder' => 'Usuario')); ?>
+
+								</div>
+								<div class="form-group">
+		        				 	<label for="password"><i class="icon-lock"></i> <b>Contrase&ntilde;a</b></label>
+									<?php echo Form::password('password', array('class' => 'inputbox form-control', 'placeholder' => 'Password')); ?>
+
+								</div>
+								<div class="form-group">
+									<a href="page-password-reset.html" class="forgot-password">Forgot password?</a>
+									<button type="submit" class="btn pull-right">Login</button>
+									<div class="clearfix"></div>
+								</div>
+							</form>
+						</div>
+						<?php echo Form::close(); ?>	
+					</div>
+				</div>
+				<br>
+				<div class="container">
+					<?php if($errors->any()): ?>
+			       		<?php foreach($errors->all() as $error): ?>
+				        	<div class="alert alert-danger"><?php echo $error; ?></div>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

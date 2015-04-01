@@ -1,0 +1,66 @@
+ 
+ <?php $__env->startSection('content'); ?>
+
+ <nav class="navbar navbar-inverse">
+    <ul class="nav navbar-nav">
+    <li><a href="<?php echo URL::to('catalogo'); ?>">Catálogo</a></li>
+        <li><a href="<?php echo URL::to('catalogo/create'); ?>">Nueva</a></li>
+
+
+    </ul>
+</nav>
+
+
+
+
+<br/>
+<div class="section">
+    <div class="container">
+        Listado Catálogo
+        <?php /*var_dump ($usuarios)*/ ?>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Código</td>
+                    <td>Descripcion</td>
+                    <td>Código padre</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($datos as $key => $value): ?>
+                <tr>
+                    <td><?php echo $value->id; ?></td>
+                    <td><?php echo $value->cat_codigo; ?></td>
+                    <td><?php echo $value->cat_descripcion; ?></td>
+                    <td><?php echo $value->cat_codigo_padre; ?></td>
+
+                    <!-- we will also add show, edit, and delete buttons -->
+                    <td>
+
+                        <!-- edit this nerd  -->
+                        <a class="pull-left btn btn-small btn-success" href="<?php echo URL::to('usuarios/' . $value->id . '/edit'); ?>">Actualizar</a>
+
+                        <!-- delete this nerd  -->
+                        <?php echo Form::open(array('url' => 'usuarios/' . $value->id, 'class' => 'pull-right')); ?>
+
+                        <?php echo Form::hidden('_method', 'DELETE'); ?>
+
+                        <?php echo Form::submit('Eliminar', array('class' => 'btn btn-small btn-warning')); ?>
+
+                        <?php echo Form::close(); ?>
+
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

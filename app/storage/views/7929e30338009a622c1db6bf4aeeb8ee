@@ -1,0 +1,79 @@
+ 
+ <?php $__env->startSection('content'); ?>
+
+ <nav class="navbar navbar-inverse">
+    <ul class="nav navbar-nav">
+    <li><a href="<?php echo URL::to('cliente'); ?>">Cliente</a></li>
+        <li><a href="<?php echo URL::to('cliente/create'); ?>">Nueva</a></li>
+
+
+    </ul>
+</nav>
+
+<br/>
+<div class="section">
+    <div class="container">
+        
+        <table class="table table-striped table-bordered">
+        <caption><h3>Listado de Clientes</h3></caption>
+            <thead>
+                <tr>
+                    <th>RUC/Cédula</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($datos as $key => $value): ?>
+                <tr>
+                    <td><?php echo $value->cli_identificacion; ?></td>
+                    <td><?php echo $value->cli_nombres_apellidos; ?></td>
+                    <td><?php echo $value->cli_tel_convencional; ?></td>
+                    <td><?php echo $value->cli_email; ?></td>
+                    <td><?php echo $value->cli_estado; ?></td>
+
+                    <!-- we will also add show, edit, and delete buttons -->
+                    <td>
+
+                        <!-- edit this nerd  -->
+                        <a class="pull-left btn btn-small btn-success" href="<?php echo URL::to('cliente/' . $value->id . '/edit'); ?>">Actualizar</a>
+
+                        <!-- delete this nerd  -->
+                        <?php echo Form::open(array('url' => 'usuarios/' . $value->id, 'class' => 'pull-right')); ?>
+
+                        <?php echo Form::hidden('_method', 'DELETE'); ?>
+
+                        <?php echo Form::submit('Eliminar', array('class' => 'btn btn-small btn-warning')); ?>
+
+                        <?php echo Form::close(); ?>
+
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="form-group">
+        <?php echo Form::open(array('url' => 'cliente', 'class' => 'form-inline', 'role' => 'form', 'method' => 'get')); ?>
+
+            <?php echo Form::text('search', Input::get("search"), array('class' => 'form-control')); ?>
+
+            <?php echo Form::submit('Buscar', array('class' => 'btn btn-primary')); ?>
+
+        <?php echo Form::close(); ?>
+
+        </div>
+
+        <div class="pagination">
+            <?php echo $datos->appends(array("search" => Input::get("search")))->links(); ?>
+
+        </div>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

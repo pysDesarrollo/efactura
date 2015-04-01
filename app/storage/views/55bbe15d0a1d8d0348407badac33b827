@@ -1,0 +1,75 @@
+<!-- Navigation & Logo-->
+        <div class="mainmenu-wrapper">
+	        <div class="container">
+	            <?php if(Auth::check()): ?>
+		        	<div class="menuextras">
+						<div class="extras">
+							<ul>
+				        		<li>Bienvenido(a): <?php echo Auth::user()->usu_nombre; ?></li>
+				        	</ul>
+						</div>
+			        </div>			    
+			    <?php else: ?>
+		        	<div class="menuextras">
+						<div class="extras">
+							<ul>
+				        		<li><a href="<?php echo URL::to('login'); ?>">Login</a></li>
+				        	</ul>
+						</div>
+			        </div>
+		        <?php endif; ?>
+		        <nav id="mainmenu" class="mainmenu">
+					<ul>
+						<li class="logo-wrapper"><a href="<?php echo URL::to('/'); ?>"><img src="<?php echo URL::to('/'); ?>/img/mPurpose-logo.png" width="100px" height="auto" alt="Multipurpose Twitter Bootstrap Template"></a></li>
+						<li class="active">
+							<a href="<?php echo URL::to('/'); ?>">Inicio</a>
+						</li>
+						<?php if(Auth::check()): ?>
+						<li class="has-submenu">
+							<a href="#">Facturación Electrónica</a>
+							<div class="mainmenu-submenu">
+								<div class="mainmenu-submenu-inner"> 
+									<div>
+										<h4>Parámetros</h4>
+										<ul>
+											<li><a href="<?php echo URL::to('emisor'); ?>">Emisor</a></li>
+											<li><a href="<?php echo URL::to('cliente'); ?>">Cliente</a></li>
+                                       		<li><a href="<?php echo URL::to('directorio'); ?>">Directorios</a></li>
+	                                        <li><a href="<?php echo URL::to('productos'); ?>">Productos</a></li>
+	                                        <li><a href="<?php echo URL::to('sucursales'); ?>">Sucursales</a></li>
+	                                        <li><a href="<?php echo URL::to('secuencia-documento'); ?>">Secuencia documento</a></li>
+										</ul>
+										<h4>Comprobantes Electrónicos</h4>
+										<ul>
+											<li><a href="<?php echo URL::to('factura-electronica'); ?>">Factura electrónica</a></li>
+											<li><a href="<?php echo URL::to('nota-debito'); ?>">Nota de débito</a></li>
+											<li><a href="<?php echo URL::to('nota-credito'); ?>">Nota de crédito</a></li>
+											<li><a href="<?php echo URL::to('nota-debito'); ?>">Guía de remisión</a></li>
+										</ul>
+									</div>
+									<div>
+										<h4>Facturación Electrónica</h4>
+										<ul>
+											<li><a href="<?php echo URL::to('consultar-facturas'); ?>">Consultar factura</a></li>
+											<li><a href="<?php echo URL::to('reportes'); ?>">Ver facturas</a></li>
+											<li><a href="<?php echo URL::to('nota-debito'); ?>">Nota de crédito</a></li>
+											<li><a href="<?php echo URL::to('nota-debito'); ?>">Guía de remisión</a></li>
+											<li><a href="<?php echo URL::to('factura-intereses'); ?>">Facturar Intereses</a></li>
+										</ul>
+										<h4>Configuraciones</h4>
+										<ul>
+											<li><a href="<?php echo URL::to('catalogo'); ?>">Catálogo</a></li>	
+										</ul>
+										<h4>Cerrar Sesión</h4>
+										<ul>
+											<li><a href="<?php echo URL::to('logout'); ?>">Logout</a></li>
+										</ul>
+									</div>
+								</div><!-- /mainmenu-submenu-inner -->
+							</div><!-- /mainmenu-submenu -->
+						</li>
+						<?php endif; ?>
+					</ul>
+				</nav>
+			</div>
+		</div>

@@ -1,0 +1,274 @@
+@extends('layouts.default')
+@section('content')
+
+<script>
+
+	$(document).ready(function(){
+
+			$("#searchFactura").click(function(){
+				//Valida la información antes de enviar a consultar
+				if ($("#fac_estab").val().length !== 3  ) {
+					alert ('Número de establecimiento no válido');
+					$("#fac_estab").val("");
+					return;
+				}
+				if ($("#fac_ptoEmi").val().length !== 3) {
+					alert ('Número de punto de emisión no válido');
+					$("#fac_ptoEmi").val("");
+					return;
+				}
+				if ($("#fac_numero").val().length < 1) {
+					alert ('Número de factura no válido');
+					return;
+				}
+
+				$('#facturaSearch').css({'display':'none'});
+				$.ajax({
+					type: 'GET',
+					url: '{{URL::to("getFacturaByNumero")}}',
+					data: {fac_estab: $("#fac_estab").val(), fac_ptoEmi: $("#fac_ptoEmi").val(), fac_numero: $("#fac_numero").val()},
+					dataType: 'json'
+				}).done(function(data){
+					if (data.id !== 0 && data.estado == 'AUTORIZADO') {
+						$('#facturaSearch').css({'display':'block'});
+						$('#idclienteMod').text(data.campoAdicional_numeroCliente);
+						$('#nombreclienteMod').text(data.razonSocialComprador);
+						$('#rucclienteMod').text(data.identificacionComprador);
+						$('#doc_subtotal0').val(numeral(data.totalsiniva).format('#,###.00'));
+						$('#doc_subtotal12').val(numeral(data.totalconiva).format('#,###.00'));
+						$('#doc_iva').val(numeral(data.valor).format('#,###.00'));
+						$('#doc_total').val(numeral(data.importeTotal).format('#,###.00'));		
+						$('#idFacturaMod').val(data.id);																	
+					} else {
+						alert("Factura no emitida o no Autorizada");
+						$("#fac_estab").val("");
+						$("#fac_ptoEmi").val("");
+						$("#fac_numero").val("");
+						$('#idFacturaMod').val("");
+					}
+				});
+			});	
+
+
+			$("#searchCliente").click(function(){
+				$('#resultadoSearch').css({'display':'none'});
+				$.ajax({
+					type: 'GET',
+					url: '{{URL::to("getClienteByCedula")}}',
+					data: {cedula: $("#cli_cedularuc").val()},
+					dataType: 'json'
+				}).done(function(data){
+					if (data.id !== 0000001) {
+						$('#resultadoSearch').css({'display':'block'});
+						$('#codigo_cliente').text(data.id);
+						$('#idcliente').val(data.id);
+						$('#nombre_cliente').text(data.cli_nombres_apellidos);
+						$('#direccion_cliente').text(data.cli_direccion);
+						$('#telefono_cliente').text(data.cli_tel_convencional);
+						$('#mail_cliente').text(data.cli_email);	
+					} else {
+						alert("Cliente no encontrado");
+						$("#cli_cedularuc").val("");
+						//$('#cedulaNuevoCliente').val($("#idcliente").val());
+						//dialog.dialog("open");
+					}
+				});
+			});	
+	});	
+
+</script>
+
+<div class="section">
+
+	<?php
+		$sec_final = sizeof($secuencia) > 0 ? $secuencia[0]->sec_final : ''; 
+		$estab = sizeof($secuencia) > 0 ? $secuencia[0]->sec_estab : '';  
+		$ptoemi = sizeof($secuencia) > 0 ? $secuencia[0]->sec_ptoemi : '';  
+	?>
+
+	<div class="container">
+		{{ Form::open(array('url' => 'factura-electronica', 'class' => 'form-horizontal',  'method' => 'post')) }}
+
+		<div class="form-group">
+			<label class="col-sm-2 label-control">
+				Nota Crédito: &nbsp;{{$estab . "-" . $ptoemi . "-"}}
+			</label>
+			<div class="col-sm-4">
+				<input class="form-control" type="text" id="doc_num" name="doc_num" value="<?php echo $sec_final; ?>" readonly required >
+				<input class="form-control" type="hidden" id="doc_estab" name="doc_estab" value="<?php echo $estab; ?>" placeholder="No. Factura">
+				<input class="form-control" type="hidden" id="doc_ptoemi" name="doc_ptoemi" value="<?php echo $ptoemi; ?>" placeholder="No. Factura">
+			</div>
+
+			<label class="col-sm-2 label-control">
+				Fecha: 
+			</label>
+			<div class="col-sm-4">
+				<input class="form-control" type="text" id="doc_fecha" name="doc_fecha" value="<?php echo date('Y-m-d'); ?>" placeholder="Fecha Factura">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 label-control">
+				CI/RUC: 
+			</label>
+			<div class="col-sm-4">
+				<input class="form-control" type="text"  id="cli_cedularuc" name="cli_cedularuc" value="" placeholder="CI/RUC Cliente" required>
+			</div>
+			<div class="col-sm-4">
+				<input type="button" id="searchCliente" value="Buscar">
+			</div>
+		</div>	
+
+		<div id='resultadoSearch' style='display:none'>
+			<div class="form-group">
+				<label class="col-sm-2 label-control">Código:</label>
+				<div class="col-sm-4">
+					<label id='codigo_cliente'></label>
+					<input class="form-control" type="hidden"  id="idcliente" name="idcliente" value="">	
+				</div>
+				<label class="col-sm-2 label-control">Nombre:</label>
+				<div class="col-sm-4">
+					<label id='nombre_cliente'></label>
+				</div>
+			</div>			
+			<div class="form-group">
+				<label class="col-sm-2 label-control">Dirección:</label>
+				<div class="col-sm-4">
+					<label id='direccion_cliente'></label> 
+				</div>
+				<label class="col-sm-2 label-control">Teléfono:</label>
+				<div class="col-sm-4">
+					<label id='telefono_cliente'></label>
+				</div>
+			</div>		
+			<div class="form-group">
+				<label class="col-sm-2 label-control">Correo Electrónico:</label>
+				<div class="col-sm-2">
+					<label id='mail_cliente'></label> 
+				</div>
+			</div>		
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 label-control">
+				No. Factura Modifica: 
+			</label>
+			<div class="col-sm-1">
+				<input class="form-control" type="text"  id="fac_estab" name="fac_estab" value="" placeholder="001" required>
+			</div>
+			<div class="col-sm-1">
+				<input class="form-control" type="text"  id="fac_ptoEmi" name="fac_ptoEmi" value="" placeholder="010" required>
+			</div>
+			<div class="col-sm-2">
+				<input class="form-control" type="text"  id="fac_numero" name="fac_numero" value="" placeholder="1" required>
+			</div>
+			<div class="col-sm-2">
+				<input type="button" id="searchFactura" value="Buscar">
+			</div>
+		</div>	
+
+		<div id='facturaSearch' style='display:none'>
+			<div class="form-group">
+				<label class="col-sm-2 label-control">Id Cliente:</label>
+				<div class="col-sm-4">
+					<label id='idclienteMod'></label>
+				</div>
+				<label class="col-sm-2 label-control">RUC/Cédula:</label>
+				<div class="col-sm-4">
+					<label id='rucclienteMod'></label>
+				</div>
+			</div>		
+
+			<div class="form-group">
+				<label class="col-sm-2 label-control">Razón Social/Nombres:</label>
+				<div class="col-sm-4">
+					<label id='nombreclienteMod'></label>
+				</div>
+				<label class="col-sm-2 label-control"></label>
+				<div class="col-sm-4">
+					<input type='hidden' name='idFacturaMod' id='idFacturaMod'></label>
+				</div>
+			</div>		
+
+			<div class="form-group">
+				<label class="col-sm-2 label-control">
+				</label>
+				<div class="col-sm-4">
+				</div>
+				<label class="col-sm-2 label-control">
+					Subtotal 0%: 
+				</label>
+				<div class="col-sm-4">
+					<input class="form-control" type="text" id="doc_subtotal0" name="doc_subtotal0" value="" placeholder="0.00" readonly required>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-2 label-control">
+				</label>
+				<div class="col-sm-4">
+				</div>
+				<label class="col-sm-2 label-control">
+					Subtotal 12%: 
+				</label>
+				<div class="col-sm-4">
+					<input class="form-control" type="text" id="doc_subtotal12" name="doc_subtotal12" value="" placeholder="0.00" readonly required>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 label-control">
+				</label>
+				<div class="col-sm-4">
+				</div>
+				<label class="col-sm-2 label-control">
+					I.V.A.: 
+				</label>
+				<div class="col-sm-4">
+					<input class="form-control" type="text" id="doc_iva" name="doc_iva" value="" placeholder="0.00" readonly required>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 label-control">
+				</label>
+				<div class="col-sm-4">
+				</div>
+				<label class="col-sm-2 label-control">
+					Total: 
+				</label>
+				<div class="col-sm-4">
+					<input class="form-control" type="text" id="doc_total" name="doc_total" value="" placeholder="0.00" readonly required>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<br>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-8">
+				{{ Form::submit('Grabar', array('class' => 'btn btn-primary')) }}
+			</div>
+			<div class="col-sm-2 pull-right">
+				<a href="{{URL::to('nota-credito/create')}}">Nueva</a>
+			</div>
+			<div class="col-sm-2 pull-right">
+				<a href="{{URL::to('nota-credito')}}">Ver Listado</a>
+			</div>
+
+		</div>	
+		
+		@if(isset($errors))
+		   
+		      @foreach($errors as $item)
+		         <div class="alert alert-danger"> {{ $item }} </div>
+		      @endforeach
+		   
+		@endif
+
+		{{ Form::close() }}
+	</div>
+</div>
+
+@stop	

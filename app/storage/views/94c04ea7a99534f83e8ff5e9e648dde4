@@ -1,0 +1,70 @@
+ 
+ <?php $__env->startSection('content'); ?>
+
+ <nav class="navbar navbar-inverse">
+    <ul class="nav navbar-nav">
+    <li><a href="<?php echo URL::to('producto'); ?>">Producto</a></li>
+        <li><a href="<?php echo URL::to('producto/create'); ?>">Nueva</a></li>
+
+
+    </ul>
+</nav>
+
+
+
+
+<br/>
+<div class="section">
+    <div class="container">
+        Listado Clientes
+        <?php /*var_dump ($usuarios)*/ ?>
+
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Cod. Principal</th>
+                    <td>Cod. Auxiliar</td>
+                    <td>Tipo Producto</td>
+                    <td>Nombre</td>
+                    <td>Valor Unitario</td>
+                    <td>Incluye Iva</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($datos as $key => $value): ?>
+                <tr>
+                    <td><?php echo $value->pro_cod_principal; ?></td>
+                    <td><?php echo $value->pro_cod_aux; ?></td>
+                    <td><?php echo $value->pro_tipo_producto; ?></td>
+                    <td><?php echo $value->pro_nombre; ?></td>
+                    <td><?php echo $value->pro_valor_unitario; ?></td>
+                    <td><?php echo $value->pro_incluyeiva; ?></td>
+
+                    <!-- we will also add show, edit, and delete buttons -->
+                    <td>
+
+                        <!-- edit this nerd  -->
+                        <a class="pull-left btn btn-small btn-success" href="<?php echo URL::to('usuarios/' . $value->id . '/edit'); ?>">Actualizar</a>
+
+                        <!-- delete this nerd  -->
+                        <?php echo Form::open(array('url' => 'usuarios/' . $value->id, 'class' => 'pull-right')); ?>
+
+                        <?php echo Form::hidden('_method', 'DELETE'); ?>
+
+                        <?php echo Form::submit('Eliminar', array('class' => 'btn btn-small btn-warning')); ?>
+
+                        <?php echo Form::close(); ?>
+
+
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
