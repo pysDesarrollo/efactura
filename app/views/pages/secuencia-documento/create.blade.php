@@ -7,7 +7,7 @@
 <div class="section">
 
     <div class="container">
-        {{ Form::open(array('url' => 'cliente', 'class' => 'form-horizontal',  'method' => 'post')) }}
+        {{ Form::open(array('url' => 'secuenciaDocumento', 'class' => 'form-horizontal',  'method' => 'post')) }}
 
 
         <div class="form-group">
