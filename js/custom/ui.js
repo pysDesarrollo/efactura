@@ -1,16 +1,9 @@
-/**
- * Created with IntelliJ IDEA.
- * User: luz
- * Date: 11/12/13
- * Time: 1:05 PM
- * To change this template use File | Settings | File Templates.
- */
 
-$(function () {
-//hace q todos los elementos con un atributo title tengan el title bonito de twitter bootstrap
+//$(function () {
+//hace q todos los elementos con un atributo title tengan el title  de twitter bootstrap
 //$('[title!=]').tooltip({});
 
-    //hace q todos los elementos con un atributo title tengan el title bonito de qtip2
+    //hace q todos los elementos con un atributo title tengan el title  de qtip2
     $('[title!=""]').qtip({
         style    : {
             classes : 'qtip-tipsy'
@@ -55,6 +48,7 @@ $(function () {
     });
 
     $(".number").keydown(function (ev) {
+
         return validarDec(ev);
     });
 
@@ -89,6 +83,6 @@ $(function () {
             doSearch($(this).next().children("a"));
         }
     });
-});
+//});
 
 
