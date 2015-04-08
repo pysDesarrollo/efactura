@@ -42,8 +42,11 @@ Route::group(array('before' => 'auth'), function(){
 	Route::resource('secuencia-documento', 'SecuenciaDocumentoController');
 	Route::resource('factura-electronica', 'FacturaElectronicaController');
 	Route::resource('nota-credito', 'NotaCreditoController');
+	Route::resource('retenciones', 'RetencionesController');
 	Route::get('factura-intereses',  array('uses' => 'FacturaElectronicaController@facturaIntereses'));
 	Route::post('factura-intereses',  array('uses' => 'FacturaElectronicaController@facturaIntereses'));
+	Route::get('genera-retenciones',  array('uses' => 'RetencionesController@create'));
+	Route::post('genera-retenciones',  array('uses' => 'RetencionesController@create'));
 });
 
 Route::get('logout', array('uses' => 'HomeController@doLogout'));

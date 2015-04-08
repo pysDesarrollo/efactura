@@ -150,7 +150,12 @@ class FacturaElectronicaController extends \BaseController {
 			$this->generaPDF($factura->id);
 			
 			$documentos = Documento::paginate(7);
-			return Redirect::to('pages.factura-electronica.index')->with('datos', $documentos)->with('notice', 'Factura creada correctamente');	
+
+			Session::flash('message', 'Datos guardados');
+        	return Redirect::to('factura-electronica');
+
+			//Redirect::to('secuencia-documento');
+			//return Redirect::to('pages.factura-electronica.index')->with('datos', $documentos)->with('notice', 'Factura creada correctamente');	
 		}
 	}
 	/**

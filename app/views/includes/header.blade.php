@@ -42,7 +42,7 @@
 										<h4>Comprobantes Electrónicos</h4>
 										<ul>
 											<li><a href="{{ URL::to('factura-electronica')}}">Factura electrónica</a></li>
-											<li><a href="{{ URL::to('nota-debito') }}">Nota de débito</a></li>
+											<li><a href="{{ URL::to('retenciones') }}">Retenciones</a></li>
 											<li><a href="{{ URL::to('nota-credito') }}">Nota de crédito</a></li>
 											<li><a href="{{ URL::to('nota-debito') }}">Guía de remisión</a></li>
 										</ul>

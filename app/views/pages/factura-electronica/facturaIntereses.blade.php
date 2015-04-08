@@ -1,6 +1,17 @@
 @extends('layouts.default')
 @section('content')
 
+<nav class="navbar navbar-inverse">
+    <ul class="nav navbar-nav">
+        <li>
+            <a href="{{  URL::to('factura-electronica') }}" class="a-header">
+                <i class="fa fa-list-ul"></i> Ver Listado
+            </a>
+        </li>
+
+    </ul>
+</nav>
+
 <div class="section">
 
 	<div class="container">

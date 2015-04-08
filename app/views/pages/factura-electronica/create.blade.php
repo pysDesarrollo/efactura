@@ -97,6 +97,20 @@
 
 </script>
 
+ <nav class="navbar navbar-inverse">
+    <ul class="nav navbar-nav">
+    	<li>
+            <a href="{{  URL::to('factura-electronica') }}" class="a-header">
+                <i class="fa fa-list-ul"></i> Ver Listado
+            </a>
+        </li>
+        <li><a href="{{ URL::to('factura-electronica/create') }}" class="a-header">
+        	<i class="fa fa-plus-square"></i> Nueva
+        </a>
+        </li>
+    </ul>
+</nav>
+
 <div class="section">
 
 	<?php
@@ -289,12 +303,6 @@
 		<div class="form-group">
 			<div class="col-sm-8">
 				{{ Form::submit('Imprimir', array('class' => 'btn btn-primary')) }}
-			</div>
-			<div class="col-sm-2 pull-right">
-				<a href="{{URL::to('factura-electronica/create')}}">Nueva</a>
-			</div>
-			<div class="col-sm-2 pull-right">
-				<a href="{{URL::to('factura-electronica')}}">Ver Listado</a>
 			</div>
 
 		</div>	

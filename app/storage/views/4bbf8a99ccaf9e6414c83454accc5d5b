@@ -1,16 +1,19 @@
+<?php $__env->startSection('header'); ?>
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
-
 <nav class="navbar navbar-inverse">
     <ul class="nav navbar-nav">
         <li>
-            <a href="<?php echo URL::to('emisor/create'); ?>" class="a-header">
-                <i class="fa fa-bank"></i> Nuevo emisor
+            <a href="<?php echo URL::to('secuencia-documento/create'); ?>"  class="a-header" >
+                <i class="fa fa-file-text-o"></i> Nuevo
             </a>
         </li>
+
     </ul>
 </nav>
 <div class="section">
     <div class="container">
+
         <?php if(Session::has('message')): ?>
         <div class="row">
             <div class="col-md-12">
@@ -23,45 +26,50 @@
         <?php endif; ?>
         <div class="row">
             <div class="col-md-12">
-                <div class="titulo-pagina"> <i class="fa fa-list-ul"></i> Listado de emisores</div>
+                <div class="titulo-pagina"> <i class="fa fa-list-ul"></i> Listado de Secuenciales</div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-<!--                        <th>ID</th>-->
-                        <th>Ruc</th>
-                        <th>Nombre</th>
-                        <th>Nombre Comercial</th>
-                        <th>Direccion</th>
-                        <th>Obligado a <br>llevar C.</th>
-                        <th>Nro. Resolución</th>
+                        <!--                <td>ID</td>-->
+                        <th>Tipo de documento</th>
+                        <th>Establecimiento</th>
+                        <th>Emisión</th>
+                        <th>Inicial</th>
+                        <th>Final</th>
+                        <th>Estado</th>
                         <th style="width: 90px">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach($datos as $key => $value): ?>
                     <tr>
-<!--                        <td><?php echo $value->id; ?></td>-->
-                        <td><?php echo $value->emi_ruc; ?></td>
-                        <td><?php echo $value->emi_nombre; ?></td>
-                        <td><?php echo $value->emi_nombre_comercial; ?></td>
-                        <td><?php echo $value->emi_direccion_matriz; ?></td>
-                        <td><?php echo ($value->emi_obligado_llevar_contabilidad=='S')?'Si':'No'; ?></td>
-                        <td style="text-align: right"><?php echo $value->emi_nro_resolucion; ?></td>
-                        <td style="width: 90px">
-                            <a class="pull-left btn btn-sm btn-success" href="<?php echo URL::to('emisor/' . $value->id . '/edit'); ?>" title="Editar">
+                        <td><?php echo $value->sec_tipo_documento; ?></td>
+                        <td><?php echo $value->sec_estab; ?></td>
+                        <td><?php echo $value->sec_ptoemi; ?></td>
+                        <td class="numero"><?php echo $value->sec_inicial; ?></td>
+                        <td class="numero"><?php echo $value->sec_final; ?></td>
+                        <td style="">
+                            <?php echo ($value->sec_estado=="A")?"Activo":"Inactivo"; ?>
+
+                        </td>
+
+                        <!-- we will also add show, edit, and delete buttons -->
+                        <td>
+                            <!-- edit this nerd  -->
+                            <a class="btn btn-sm btn-success" href="<?php echo URL::to('secuencia-documento/' . $value->id . '/edit'); ?>" title="Editar">
                                 <i class="fa fa-pencil"></i>
                             </a>
-
-                            <?php echo Form::open(array('url' => 'emisor/' . $value->id, 'class' => 'pull-right', 'style' => 'display: inline-table')); ?>
+                            <!-- delete this nerd  -->
+                            <?php echo Form::open(array('url' => 'secuencia-documento/' . $value->id, 'style' => 'display: inline-table')); ?>
 
                             <?php echo Form::hidden('_method', 'DELETE'); ?>
 
                             <a href="#"  class="btn bg-danger btn-sm delete" title="Eliminar"><i class="fa fa-trash"></i></a>
-<!--                            <?php echo Form::submit('Eliminar', array('class' => 'btn btn-small btn-warning')); ?>-->
+                            <!--                    <?php echo Form::submit('', array('class' => 'btn btn-small btn-warning','title'=>'Eliminar','html'=>'<i class="fa fa-trash"></i>')); ?>-->
                             <?php echo Form::close(); ?>
 
 
