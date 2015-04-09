@@ -26,6 +26,8 @@ Route::get('getNC/{id}', array('uses' => 'NotaCreditoController@generaPDF'));
 
 Route::get('getFC/{id}', array('uses' => 'FacturaElectronicaController@generaPDF'));
 
+Route::get('getRT/{id}', array('uses' => 'RetencionesController@generaPDF'));
+
 Route::get('login', array('uses' => 'HomeController@showLogin'));
 
 Route::post('login', array('uses' => 'HomeController@doLogin'));

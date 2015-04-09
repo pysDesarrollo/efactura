@@ -19,7 +19,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                @if($objeto->id)
+                <div class="titulo-pagina"> <i class="fa fa-file-text-o"></i> Editar secuencial</div>
+                @else
                 <div class="titulo-pagina"> <i class="fa fa-file-text-o"></i> Registrar un nuevo secuencial</div>
+                @endif
+<!--                <div class="titulo-pagina"> <i class="fa fa-file-text-o"></i> Registrar un nuevo secuencial</div>-->
             </div>
         </div>
         {{ Form::open(array('url' => 'secuencia-documento', 'class' => 'form-horizontal frmSecuencia',  'method' => 'post')) }}
@@ -29,10 +34,15 @@
                 Tipo de documento
             </label>
             <div class="col-md-2">
+                @if($objeto->id)
+                <input type="hidden" name="sec_tipo_documento" value="{{$objeto->sec_tipo_documento}}">
+                {{($objeto->sec_tipo_documento=='FA')?'Factura':'Nota de crédito'}}
+                @else
                 <select class="form-control input-sm tipo" name="sec_tipo_documento" >
                     <option value="FA">Factura</option>
                     <option value="NC">Nota de crédito</option>
                 </select>
+                @endif
             </div>
         </div>
         <div class="form-group">
