@@ -1,4 +1,12 @@
 <?php $__env->startSection('content'); ?>
+<style type="text/css">
+    #mensaje{
+        padding: 5px;
+        color: red;
+        font-weight: bold;
+        font-size: 12px;
+    }
+</style>
 
 <nav class="navbar navbar-inverse">
     <ul class="nav navbar-nav">
@@ -19,83 +27,91 @@
         <?php echo Form::open(array('url' => 'genera-retenciones', 'class' => 'form-horizontal',  'method' => 'post')); ?>
 
 
-         <?php if($errors->has()): ?>
-              <?php foreach($errors->all() as $error): ?>
-                <div class="alert alert-danger"> <?php echo $error; ?> </div>
-              <?php endforeach; ?>
-         <?php endif; ?>
+        <?php if($errors->has()): ?>
+        <?php foreach($errors->all() as $error): ?>
+        <div class="alert alert-danger"> <?php echo $error; ?> </div>
+        <?php endforeach; ?>
+        <?php endif; ?>
 
         <div class="form-group">
             <label class="col-sm-2 label-control">
                 Fecha:
             </label>
-            <div class="col-sm-4">
-                <input class="form-control" type="text" id="fecha_proceso" name="fecha_proceso" value="<?php echo date('Ym'); ?>" required >
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control input-sm" type="text" id="fecha_proceso" name="fecha_proceso" value="<?php echo date('Ym'); ?>" required >
+                    <span class="input-group-addon" style="background: #F0AD4E !important;font-weight: bold">
+                        Ej: 201501
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-7" id="mensaje">
+
             </div>
 
         </div>
         <div class="form-group">
             <div class="col-sm-8">
-                <?php echo Form::submit('Subir Retenciones', array('class' => 'btn btn-primary')); ?>
+                <?php echo Form::submit('Subir Retenciones', array('class' => 'btn btn-primary btn-subir')); ?>
 
             </div>
-        </div>  
-        
+        </div>
+
         <?php if(isset($registros)): ?>
-                <?php if($registros >= 0): ?>
-                     <div class="alert alert-success"> <?php echo "Se ha(n) procesado " . $registros . " registro(s)"; ?> </div>
-                <?php endif; ?>        
+        <?php if($registros >= 0): ?>
+        <div class="alert alert-success"> <?php echo "Se ha(n) procesado " . $registros . " registro(s)"; ?> </div>
+        <?php endif; ?>
         <?php endif; ?>
 
         <?php if(isset($errores)): ?>
-                 <?php if($errores != ""): ?>
-                    <div class="alert alert-danger"> <?php echo "Clientes con error: " . $errores;; ?> </div>
-                 <?php endif; ?>         
+        <?php if($errores != ""): ?>
+        <div class="alert alert-danger"> <?php echo "Clientes con error: " . $errores;; ?> </div>
+        <?php endif; ?>
         <?php endif; ?>
 
         <?php echo Form::close(); ?>
 
 
         <?php if(isset($registros)): ?>
-                <?php if($registros > 0): ?>
+        <?php if($registros > 0): ?>
         <table class="table table-striped table-bordered">
-        <caption><h3>Listado de Retenciones Procesadas</h3></caption>
+            <caption><h3>Listado de Retenciones Procesadas</h3></caption>
             <thead>
-                <tr>
-                    <th>No. Retención</th>
-                    <th>Fecha</th>
-                    <th>Cliente</th>
-                    <th>Clave Acceso</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
+            <tr>
+                <th>No. Retención</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Clave Acceso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
             </thead>
             <tbody>
-                <?php foreach($datos as $key => $value): ?>
-                <tr>
-                    <td><?php echo $value->estab . $value->ptoEmi . $value->secuencial; ?></td>
-                    <td><?php echo date('Y-m-d', strtotime($value->fechaEmision)); ?></td>
-                    <td><?php echo $value->identificacionSujetoRetenido; ?></td>
-                    <td><?php echo $value->claveAcceso; ?></td>
+            <?php foreach($datos as $key => $value): ?>
+            <tr>
+                <td><?php echo $value->estab . $value->ptoEmi . $value->secuencial; ?></td>
+                <td><?php echo date('Y-m-d', strtotime($value->fechaEmision)); ?></td>
+                <td><?php echo $value->identificacionSujetoRetenido; ?></td>
+                <td><?php echo $value->claveAcceso; ?></td>
 
-                    <!-- we will also add show, edit, and delete buttons -->
-                    <td><?php echo $value->estado; ?></td>                                       
-                    <td>
+                <!-- we will also add show, edit, and delete buttons -->
+                <td><?php echo $value->estado; ?></td>
+                <td>
 
-                        <!-- edit this nerd  -->
-                        <a class="pull-left btn btn-small btn-success" href="<?php echo URL::to('getFC/' . $value->id); ?>">Visualizar</a>
+                    <!-- edit this nerd  -->
+                    <a class="pull-left btn btn-small btn-success" href="<?php echo URL::to('getFC/' . $value->id); ?>">Visualizar</a>
 
-                    </td>
-                </tr>
-                <?php endforeach; ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
             </tbody>
         </table>
 
         <?php echo Form::open(array('url' => 'genera-retenciones', 'class' => 'form-inline', 'role' => 'form', 'method' => 'get')); ?>
 
-            <?php echo Form::text('search', Input::get("search"), array('class' => 'form-control')); ?>
+        <?php echo Form::text('search', Input::get("search"), array('class' => 'form-control')); ?>
 
-            <?php echo Form::submit('Buscar', array('class' => 'btn btn-primary')); ?>
+        <?php echo Form::submit('Buscar', array('class' => 'btn btn-primary')); ?>
 
         <?php echo Form::close(); ?>
 
@@ -105,12 +121,48 @@
 
         </div>
 
-            <?php endif; ?>
+        <?php endif; ?>
         <?php endif; ?>
 
     </div>
 
 </div>
+<script type="text/javascript">
+    $(".btn-subir").click(function(){
+        var valor = $("#fecha_proceso").val();
+        var mes;
+        var anio;
+        var actual = new Date().getFullYear()*1;
+        var mensaje = "";
+        if(valor.length!=6){
+            mensaje="Por favor, ingrese una fecha correcta con el formato 'añomes' (yyyymm) ejemplo: 201501 (6 números) ";
+        }else{
+            if(isNaN(valor)){
+                mensaje="Por favor, ingrese solo números con el formato 'añomes' (yyyymm) ejemplo: 201501 ";
+            }else{
+                mes = valor.substr(4);
+                anio = valor.substr(0,4);
+//            console.log(anio,mes,actual)
+                if(mes*1>12){
+                    mensaje="Por favor, ingrese un mes valido ";
+                }
+                if(anio*1<2015 || anio*1>actual){
+                    mensaje="Por favor, ingrese un año valido, mínimo 2015 ";
+                }
 
+            }
+        }
+
+        if(mensaje!=""){
+            $("#mensaje").html(mensaje).show("slide")
+            return false
+        }else{
+            return true
+        }
+
+
+
+    })
+</script>
 <?php $__env->stopSection(); ?>  
 <?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

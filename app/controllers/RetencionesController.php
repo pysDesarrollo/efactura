@@ -68,8 +68,12 @@ class RetencionesController extends \BaseController {
                 $cliente = Cliente::join('emisor', 'cliente.id_emi', '=', 'emisor.id')
                     ->join('catalogo', 'cliente.cli_tipo_identificacion', '=', 'catalogo.id')
                     ->where('cliente.cli_identificacion', "=", $value->ruc_beneficiario)
+                    ->select('cliente.id as idcliente', 'cliente.*', 'emisor.*', 'catalogo.*')
                     ->where('catalogo.cat_codigo_padre', "=", "04")
                     ->get();
+
+                print_r($cliente);
+                die();
 
                 //Busca secuencia de documentos
                 $documento = SecuenciaDocumento::where("sec_tipo_documento", "=", "RT")
@@ -104,7 +108,7 @@ class RetencionesController extends \BaseController {
                     $retencion->periodoFiscal = date('Y-m-d', strtotime($value->fecha_crea));
                     $retencion->totalDescuento = 0;
                     $retencion->campoAdicional_emailCliente = is_null($cliente[0]->cli_email) ? $cliente[0]->emi_email : $cliente[0]->cli_email;
-                    $retencion->campoAdicional_numeroCliente = $cliente[0]->id;
+                    $retencion->campoAdicional_numeroCliente = $cliente[0]->idcliente;
                     $retencion->estado = $cliente[0]->emi_estado_documento;
                     $retencion->num_compra = $datos['doc_num'];
                     $retencion->save();
@@ -266,6 +270,7 @@ class RetencionesController extends \BaseController {
         $detalle = DetalleRetencion::where("id","=",$retId)->get();
         $emision = Catalogo::where("cat_referencia","=",$retencion['tipoEmision'])->get();
         $emision = $emision[0]->cat_descripcion;
+        $cliente = Cliente::find($retencion->campoAdicional_numeroCliente);
 
 	     $html = "<html>
 	         <head>
@@ -331,7 +336,7 @@ class RetencionesController extends \BaseController {
                          "<td align='right'><font face='Verdana' size='2'>" . date('d/m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . date('m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . number_format($value->baseImponible, "2") . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . ($value->codigo==1?'Iva':'Renta') . "</font></td>" .
+                         "<td align='right'><font face='Verdana' size='2'>" . ($value->codigo==2?'Iva':'Renta') . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . number_format($value->porcentajeRetener, "2") . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . number_format($value->valorRetenido, "2") . "</font></td></tr>";
                          $total+=$value->valorRetenido;
@@ -342,9 +347,9 @@ class RetencionesController extends \BaseController {
         $html.="<br/><br/><div class='informacion-adicional'>
             <table style='width:100%'>
             <tr><td style='width: 30%'></td><td style='width: 70%'>Informaci&oacute;n adicional</td></tr>
-            <tr><td style='width: 30%'>Direcci&oacute;n</td><td style='width: 70%'>".utf8_decode($retencion['dirMatriz'])."</td></tr>
-            <tr><td style='width: 30%'>Email</td><td style='width: 70%'>monica.requena@petroleosyservicios.com</td></tr>
-            <tr><td style='width: 30%'>Tel&eacute;fono</td><td style='width: 70%'>022523851</td></tr>
+            <tr><td style='width: 30%'>Direcci&oacute;n</td><td style='width: 70%'>".utf8_decode($cliente['cli_direccion'])."</td></tr>
+            <tr><td style='width: 30%'>Email</td><td style='width: 70%'>".utf8_decode($retencion['campoAdicional_emailCliente'])."</td></tr>
+            <tr><td style='width: 30%'>Tel&eacute;fono</td><td style='width: 70%'>".utf8_decode($cliente['cli_tel_convencional'])."</td></tr>
             </table>
         </div>";
 	     if ($retencion['estado'] != 'NUEVA') {
