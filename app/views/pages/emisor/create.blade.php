@@ -135,7 +135,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                @if($objeto->id)
+                <div class="titulo-pagina"> <i class="fa fa-bank"></i> Editar emisor</div>
+                @else
                 <div class="titulo-pagina"> <i class="fa fa-bank"></i> Registrar un nuevo emisor</div>
+                @endif
             </div>
         </div>
 
@@ -143,13 +147,13 @@
         <input type="hidden" name="id" value="{{$objeto->id}}">
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                RUC:
+                RUC
             </label>
             <div class="col-sm-3">
                 <input id="ruc" class="form-control input-sm required number" type="text" name="ruc"  placeholder="RUC" required value="{{$objeto->emi_ruc}}">
             </div>
             <label class="col-sm-2 control-label">
-                Razon Solcial:
+                Razon Solcial
             </label>
             <div class="col-sm-5">
                 <input class="form-control input-sm required" type="text" name="nombres_apellidos_razon"  placeholder="Apellidos y Nombres" value="{{$objeto->emi_nombre}}" >
@@ -157,9 +161,9 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                Nombre Comercial:
+                Nombre Comercial
             </label>
-            <div class="col-sm-6">
+            <div class="col-sm-10">
                 <input class="form-control input-sm required" type="text" name="nombre_comercial"  placeholder="Nombre Comercial" value="{{$objeto->emi_nombre_comercial}}">
             </div>
 
@@ -167,45 +171,39 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">
-                Dirección Matriz:
+                Dirección Matriz
             </label>
             <div class="col-sm-10">
                 <textarea class="form-control input-sm required" rows="1" name="direccion_matriz" id="direccion_matriz" placeholder="Dirección Matriz" required>{{$objeto->emi_direccion_matriz}}</textarea>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">
-                Obligado a llevar contabilidad
-            </label>
-            <div class="col-sm-1">
-                <input type="checkbox" name="obligado_cotablilidad" value="S" {{($objeto->id)?($objeto->emi_obligado_llevar_contabilidad=='S')?'checked':'':'checked'}}>
-            </div>
-
-            <label class="col-sm-2 control-label">
-                Contribuyente Especial Nro de resolución:
+            <label class="col-sm-2 control-label" style="margin-top: 0px;padding-top: 0px">
+                Contribuyente Especial Nro de resolución
             </label>
             <div class="col-sm-2">
                 <input type="text" class="form-control input-sm" name="nro_resolucion"  placeholder="Nro. de Resolución" value="{{$objeto->emi_nro_resolucion}}">
             </div>
-
-            <label class="col-sm-2">
+            <label class="col-sm-2 control-label" style="margin-top: 0px;padding-top: 0px">
+                Obligado a llevar contabilidad
+            </label>
+            <div class="col-sm-1">
+                <input type="checkbox" id="contabilidad" name="obligado_cotablilidad"  class="form-control" data-off-color="danger" value="S" >
+            </div>
+            <label class="col-sm-2 control-label">
                 Empresa por defecto
             </label>
             <div class="col-sm-2">
-                <input type="checkbox" name="empresa_defecto" value="S" {{($objeto->id)?($objeto->emi_defecto=='S')?'checked':'':'checked'}}>
+                <input id="defecto" name="empresa_defecto"  type="checkbox" data-off-color="danger" class="form-control" value="S" >
+<!--                <input type="checkbox" name="empresa_defecto" value="S" {{($objeto->id)?($objeto->emi_defecto=='S')?'checked':'':'checked'}}>-->
             </div>
 
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">
-                Tiempo máximo de espera(segundos):
-            </label>
-            <div class="col-sm-1">
-                <input class="form-control input-sm required number" type="number" name="max_time" id="max_time" min="3" max="9999"  maxlength="4" required value="{{($objeto->id!='')?$objeto->emi_tiempo_max_espera:3}}">
-            </div>
+
 
             <label class="col-sm-2 control-label">
-                Tipo de Ambiente:
+                Tipo de Ambiente
             </label>
             <div class="col-sm-2">
                 <select class="form-control required input-sm" name="tipo_ambiente" id="tipo_ambiente" required>
@@ -216,7 +214,7 @@
                 </select>
             </div>
             <label class="col-sm-2 control-label">
-                Tipo Emisión:
+                Tipo Emisión
             </label>
             <div class="col-sm-3">
                 <select class="form-control input-sm required" name="tipo_emision" id="tipo_emision">
@@ -225,6 +223,12 @@
                     @endforeach;
 
                 </select>
+            </div>
+            <label class="col-sm-2 control-label" style="margin-top: 0px;padding-top: 0px">
+                Tiempo máximo de espera(segundos)
+            </label>
+            <div class="col-sm-1">
+                <input class="form-control input-sm required number" type="number" name="max_time" id="max_time" min="3" max="9999"  maxlength="4" required value="{{($objeto->id!='')?$objeto->emi_tiempo_max_espera:3}}">
             </div>
         </div>
         <div class="form-group" style="margin-top: 25px">
@@ -269,10 +273,22 @@
     $(function () {
         $("#tipo_emision").val("{{$objeto->emi_tipo_emision}}");
         $("#tipo_ambiente").val("{{$objeto->emi_tipo_ambiente}}");
-        console.log("{{$objeto->emi_tipo_ambiente}}","{{$objeto->emi_tipo_emision}}")
+
+
 
     });
-
+    $("#defecto").bootstrapSwitch({
+        onText:"Si",
+        offText:"No",
+        handleWidth:40,
+        state :{{($objeto->id)?($objeto->emi_defecto=='S')?'true':'false':'true'}}
+    });
+    $("#contabilidad").bootstrapSwitch({
+        onText:"Si",
+        offText:"No",
+        handleWidth:40,
+        state :{{($objeto->id)?($objeto->emi_obligado_llevar_contabilidad=='S')?'true':'false':'true'}}
+    });
 
 </script>
 <script src="{{ URL::to('/') }}/js/custom/ui.js"></script>

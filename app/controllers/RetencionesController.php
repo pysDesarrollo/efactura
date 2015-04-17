@@ -21,13 +21,8 @@ class RetencionesController extends \BaseController {
 
         return View::make('pages.retencion.index')->with('datos', $documentos);
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
+
+    public function cargarRetenciones(){
         $total = -1;
         $errores = "";
 
@@ -174,15 +169,92 @@ class RetencionesController extends \BaseController {
             $documentos = Retencion::orderBy('num_compra', 'desc')->paginate(7);
         }
 
-        return View::make('pages.retencion.create')->with('datos', $documentos)->with('registros',$total)->with('errores',$errores);
+        return View::make('pages.retencion.generarRetenciones')->with('datos', $documentos)->with('registros',$total)->with('errores',$errores);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    /*0290014328001*/
+    public function create()
+    {
+
+        $secuencia = SecuenciaDocumento::where('sec_tipo_documento','=','RT')->where('sec_estado','=','A')->get()->first();
+        $tipos = Catalogo::where("cat_codigo_padre","=","05")->orWhere("cat_codigo_padre","=","06")->get()->toArray();
+
+        return View::make('pages.retencion.create')->with("secuencia",$secuencia)->with("tipos",$tipos);
     }
     /**
      * Store a newly created resource in storage.
      *
      * @return Response
      */
-    public function store()
-    {
+    public function store(){
+
+        $data = Input::get('data');
+        $registros = explode ("|",$data);
+
+        $emisor = Emisor::find(1);
+        $secuencia = SecuenciaDocumento::where('sec_tipo_documento','=','RT')->where('sec_estado','=','A')->get()->first();
+        $cliente = Cliente::find(Input::get('idcliente'));
+
+        $retencion = new Retencion();
+        $retencion->ambiente = 2;
+        $retencion->tipoEmision = $emisor->emi_tipo_emision;
+        $retencion->razonSocial = $emisor->emi_nombre;
+        $retencion->nombreComercial = $emisor->emi_nombre_comercial;
+        $retencion->ruc = $emisor->emi_ruc;
+        $datos = array("doc_fecha" => date('Y-m-d', strtotime(Input::get('fechaEmision'))), "doc_estab" => $secuencia->sec_estab,
+            "doc_ptoemi" => $secuencia->sec_ptoemi, "doc_num" => $secuencia->sec_final +1);
+        $retencion->claveAcceso = $this->generarToken($datos, array($cliente), "07");;
+        $retencion->codDoc = "07"; //Retención;
+        $retencion->estab=$secuencia->sec_estab;
+        $retencion->ptoEmi=$secuencia->sec_ptoemi;
+        $retencion->secuencial=str_pad($secuencia->sec_final +1, 9, '0', STR_PAD_LEFT);;
+        $retencion->dirMatriz = $emisor->emi_direccion_matriz;;
+        $retencion->fechaEmision = date('Y-m-d', strtotime(Input::get('fechaEmision')));
+        $retencion->dirEstablecimiento = $cliente->emi_direccion_matriz;
+        $retencion->contribuyenteEspecial = $cliente->emi_nro_resolucion;;
+        $retencion->obligadoContabilidad = $emisor->emi_obligado_llevar_contabilidad ;
+        $retencion->tipoIdentificacionSujetoRetenido = $cliente->cli_tipo_identificacion;
+        $retencion->razonSocialSujetoRetenido = $cliente->cli_nombres_apellidos;
+        $retencion->identificacionSujetoRetenido = $cliente->cli_identificacion;
+        $retencion->periodoFiscal =  Input::get('fechaEmision');
+        $retencion->totalDescuento = 0;
+        $retencion->campoAdicional_emailCliente = $cliente->cli_email;
+        $retencion->campoAdicional_numeroCliente  = $cliente->id ;
+        $retencion->estado = $cliente->emi_estado_documento;
+        $retencion->num_compra = $secuencia->sec_final +1;
+        $retencion->save();
+        $secuencia->sec_final= $secuencia->sec_final+1;
+        $secuencia->save();
+        foreach($registros as $item){
+            if($item!=""){
+                $datos = explode (";",$item);
+                $catalogo = Catalogo::find($datos[0]);
+                $detalleretencion = new DetalleRetencion;
+                $detalleretencion->id = $retencion->id;
+                $detalleretencion->ruc = $emisor->emi_ruc;
+                $detalleretencion->estab = $secuencia->sec_estab;
+                $detalleretencion->ptoEmi =$secuencia->sec_ptoemi;
+                $detalleretencion->secuencial = str_pad($retencion->secuencial, 9, '0', STR_PAD_LEFT);
+                $detalleretencion->codigo = 1;
+                $detalleretencion->codigoRetencion = $catalogo->cat_referencia;
+                $detalleretencion->baseImponible =  floatval($datos[1]);
+                $detalleretencion->porcentajeRetener =  floatval($datos[2]);
+                $detalleretencion->valorRetenido = floatval($datos[1])*floatval($datos[2])/100;
+                $detalleretencion->codDocSustento = "01"; //Factura
+                $detalleretencion->numDocSustento = Input::get('numDocSustento');
+                $detalleretencion->fechaEmisionDocSustento = date('Y-m-d', strtotime(Input::get('fechaEmisionDocSustento')));
+                $detalleretencion->num_compra = $retencion->secuencial;
+                $detalleretencion->save();
+            }
+
+        }
+
+        return Redirect::to('retenciones');
 
     }
 
@@ -331,7 +403,7 @@ class RetencionesController extends \BaseController {
                          "<td align='right'><font face='Verdana' size='2'>" . date('d/m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . date('m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . number_format($value->baseImponible, "2") . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . ($value->codigo==1?'Iva':'Renta') . "</font></td>" .
+                         "<td align='right'><font face='Verdana' size='2'>" . Catalogo::where("cat_referencia","=",$value->codigoRetencion)->get()->first()->cat_descripcion . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . number_format($value->porcentajeRetener, "2") . "</font></td>" .
                          "<td align='right'><font face='Verdana' size='2'>" . number_format($value->valorRetenido, "2") . "</font></td></tr>";
                          $total+=$value->valorRetenido;

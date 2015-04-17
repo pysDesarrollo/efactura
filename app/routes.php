@@ -22,6 +22,8 @@ Route::get('getProductById', array('uses' => 'FacturaElectronicaController@getPr
 
 Route::get('getFacturaByNumero', array('uses' => 'FacturaElectronicaController@getFacturaByNumero'));
 
+Route::get('getCatalogoByPadre/{id}', array('uses' => 'CatalogoController@getCatalogoByPadre'));
+
 Route::get('getNC/{id}', array('uses' => 'NotaCreditoController@generaPDF'));
 
 Route::get('getFC/{id}', array('uses' => 'FacturaElectronicaController@generaPDF'));
@@ -33,6 +35,8 @@ Route::get('login', array('uses' => 'HomeController@showLogin'));
 Route::post('login', array('uses' => 'HomeController@doLogin'));
 
 Route::get('reportes', array('uses' => 'HomeController@doReports'));
+
+Route::get('catalogo/createCategoria', array('uses' => 'CatalogoController@createCategoria'));
 
 Route::group(array('before' => 'auth'), function(){
 	Route::resource('emisor', 'EmisorController');
@@ -47,8 +51,8 @@ Route::group(array('before' => 'auth'), function(){
 	Route::resource('retenciones', 'RetencionesController');
 	Route::get('factura-intereses',  array('uses' => 'FacturaElectronicaController@facturaIntereses'));
 	Route::post('factura-intereses',  array('uses' => 'FacturaElectronicaController@facturaIntereses'));
-	Route::get('genera-retenciones',  array('uses' => 'RetencionesController@create'));
-	Route::post('genera-retenciones',  array('uses' => 'RetencionesController@create'));
+	Route::get('genera-retenciones',  array('uses' => 'RetencionesController@cargarRetenciones'));
+	Route::post('genera-retenciones',  array('uses' => 'RetencionesController@cargarRetenciones'));
 });
 
 Route::get('logout', array('uses' => 'HomeController@doLogout'));

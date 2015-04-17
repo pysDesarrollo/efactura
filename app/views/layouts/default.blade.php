@@ -54,6 +54,10 @@
     <script src="{{ URL::to('/') }}/js/custom/funciones.js"></script>
 
     <script src="{{ URL::to('/') }}/js/bootstrap.min.js"></script>
+
+    <!--  CheckBox  -->
+    <script src="{{ URL::to('/') }}/js/plugins/bootstrap-switch-master/dist/js/bootstrap-switch.min.js"></script>
+    <link rel="stylesheet" href="{{ URL::to('/') }}/js/plugins/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" />
     @yield('header')
 </head>
 <body>

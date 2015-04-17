@@ -1,57 +1,68 @@
- @extends('layouts.default')
- @section('content')
+@extends('layouts.default')
+@section('content')
 
- <nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse">
     <ul class="nav navbar-nav">
-    <li><a href="{{ URL::to('catalogo') }}">Catálogo</a></li>
-        <li><a href="{{ URL::to('catalogo/create') }}">Nueva</a></li>
-
-
+        <li>
+            <a href="{{ URL::to('catalogo/create') }}">
+                <i class="fa fa-list-ol"></i> Nuevo registro
+            </a>
+        </li>
+        <li>
+            <a href="{{ URL::to('catalogo/createCategoria') }}">
+                <i class="fa fa-indent"></i> Nueva categoria
+            </a>
+        </li>
     </ul>
 </nav>
-
-<br/>
 <div class="section">
     <div class="container">
-        Listado Catálogo
-        {{--var_dump ($usuarios)--}}
+        @if(Session::has('message'))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mensajes">
+                    {{ Session::get('message') }}
+                </div>
+            </div>
+        </div>
+        @endif
+        <div class="row">
+            <div class="col-md-12">
+                <div class="titulo-pagina"> <i class="fa fa-list-ul"></i> Catálogo</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <label>Categoría</label>
+            </div>
+            <div class="col-md-2">
+                <select id="categoria" name="categoria" class="form-control input-sm">
+                    @foreach($categorias as  $value)
+                    <option value="{{$value['cat_codigo']}}">{{$value['cat_descripcion']}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 15px">
+            <div class="col-md-12" id="detalle">
 
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <td>ID</td>
-                    <td>Código</td>
-                    <td>Descripcion</td>
-                    <td>Código padre</td>
-                    <td>Acciones</td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($datos as $key => $value)
-                <tr>
-                    <td>{{ $value->id }}</td>
-                    <td>{{ $value->cat_codigo }}</td>
-                    <td>{{ $value->cat_descripcion }}</td>
-                    <td>{{ $value->cat_codigo_padre }}</td>
+            </div>
+        </div>
 
-                    <!-- we will also add show, edit, and delete buttons -->
-                    <td>
-
-                        <!-- edit this nerd  -->
-                        <a class="pull-left btn btn-small btn-success" href="{{ URL::to('usuarios/' . $value->id . '/edit') }}">Actualizar</a>
-
-                        <!-- delete this nerd  -->
-                        {{ Form::open(array('url' => 'usuarios/' . $value->id, 'class' => 'pull-right')) }}
-                        {{ Form::hidden('_method', 'DELETE') }}
-                        {{ Form::submit('Eliminar', array('class' => 'btn btn-small btn-warning')) }}
-                        {{ Form::close() }}
-
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
     </div>
 </div>
+<script type="text/javascript">
+    $("#categoria").change(function(){
+        $.ajax({
+            type: 'GET',
+            url: '{{URL::to("getCatalogoByPadre")}}/'+ $("#categoria").val(),
+            data:""
+        }).success(function(msg){
+            console.log("msg",msg)
+            $("#detalle").html(msg)
+        });
+    })
+    $("#categoria").change()
 
+</script>
 @stop
