@@ -337,7 +337,9 @@ class FacturaElectronicaController extends \BaseController {
 
 			//Coge los valores de intereses para generar facturas
 			$intereses = Interes::where('int_fecha', '=', Input::get('fecha_proceso'))
-							    ->where('int_estado', '=', 'POR FACTURAR')->get();
+							    ->where('int_estado', '=', 'POR FACTURAR')
+							    ->orderBy('int_codigocliente', 'desc')
+							    ->get();
 
 			foreach ($intereses as $key => $value) {						
 				$cliente = Cliente::join('emisor', 'cliente.id_emi', '=', 'emisor.id')
