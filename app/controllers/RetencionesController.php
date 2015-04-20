@@ -201,7 +201,8 @@ class RetencionesController extends \BaseController {
         $cliente = Cliente::find(Input::get('idcliente'));
 
         $retencion = new Retencion();
-        $retencion->ambiente = 2;
+//        $retencion->ambiente = 2;
+        $retencion->ambiente = 1;
         $retencion->tipoEmision = $emisor->emi_tipo_emision;
         $retencion->razonSocial = $emisor->emi_nombre;
         $retencion->nombreComercial = $emisor->emi_nombre_comercial;
