@@ -11,9 +11,13 @@
 <br/>
 <div class="section">
     <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="titulo-pagina"> <i class="fa fa-list-ul"></i> Listado de Notas de Crédito</div>
+            </div>
+        </div>
 
         <table class="table table-striped table-bordered">
-         <caption><h3>Listado Notas de Crédito</h3></caption>
             <thead>
                 <tr>
                     <th>No.</th>

@@ -15,9 +15,13 @@
 <br/>
 <div class="section">
     <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="titulo-pagina"> <i class="fa fa-list-ul"></i> Listado de Retenciones</div>
+            </div>
+        </div>
 
         <table class="table table-striped table-bordered">
-            <caption><h3>Listado de Retenciones</h3></caption>
             <thead>
             <tr>
                 <th>No. Retención</th>

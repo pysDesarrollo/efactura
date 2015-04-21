@@ -377,7 +377,7 @@ class RetencionesController extends \BaseController {
 	     		 	<p><font face='Verdana' size='2'>COMPROBANTE DE RETENCI&Oacute;N</font></p>
 	     		 	<p><font face='Verdana' size='2'>No. " . $retencion['estab']  . "-" . $retencion['ptoEmi'] . "-" . $retencion['secuencial'] ."</font>
 
-             <p><font face='Verdana' size='1'>AMBIENTE: ".($retencion['ambiente']==1?"PRODUCCI&Oacute;N":"PRUEBAS")."</font></p>
+             <p><font face='Verdana' size='1'>AMBIENTE: ".($retencion['ambiente']==2?"PRODUCCI&Oacute;N":"PRUEBAS")."</font></p>
                    <p><font face='Verdana' size='1'>EMISI&Oacute;N: ".$emision."</font></p>
 	     		 	<p><font face='Verdana' size='1'>CLAVE DE ACCESO<br>". $retencion['claveAcceso'] . "</font></td>" .
              "</tr>" .
