@@ -97,7 +97,7 @@
                 <td>
 
                     <!-- edit this nerd  -->
-                    <a class="pull-left btn btn-small btn-success" href="{{ URL::to('getFC/' . $value->id) }}">Visualizar</a>
+                    <a class="pull-left btn btn-small btn-success" href="{{ URL::to('getRT/' . $value->id) }}">Visualizar</a>
 
                 </td>
             </tr>
