@@ -214,7 +214,7 @@ class RetencionesController extends \BaseController {
         $retencion->codDoc = "07"; //Retención;
         $retencion->estab=$secuencia->sec_estab;
         $retencion->ptoEmi=$secuencia->sec_ptoemi;
-        $retencion->secuencial=str_pad($secuencia->sec_final +1, 9, '0', STR_PAD_LEFT);;
+        $retencion->secuencial=str_pad($secuencia->sec_final +1, 9, '0', STR_PAD_LEFT);
         $retencion->dirMatriz = $emisor->emi_direccion_matriz;;
         $retencion->fechaEmision = date('Y-m-d', strtotime(Input::get('fechaEmision')));
         $retencion->dirEstablecimiento = $cliente->emi_direccion_matriz;
@@ -335,14 +335,15 @@ class RetencionesController extends \BaseController {
     }
 
     public function generaPDF($retId){
-        // dd("aqui");
+
         $retencion = Retencion::find($retId);
+
         $detalle = DetalleRetencion::where("id","=",$retId)->get();
         $emision = Catalogo::where("cat_referencia","=",$retencion['tipoEmision'])->get();
         $emision = $emision[0]->cat_descripcion;
         $cliente = Cliente::find($retencion['campoAdicional_numeroCliente']);
 
-	     $html = "<html>
+        $html = "<html>
 	         <head>
 	        <style type='text/css'>
 
@@ -366,55 +367,57 @@ class RetencionesController extends \BaseController {
 	         </head>
 
 	         <body>" .
-             "<table border='0' width='100%'>" .
-             "<tr>" .
-             "<td width='45%' align='center'>
-             <img src='img/pys-logo.gif'><p><font face='Verdana' size='2'><b>" . utf8_decode($retencion['razonSocial']) .
-             "</b></font></p><p><font face='Verdana' size='1'><b>Matriz: </b>" . utf8_decode($retencion['dirMatriz']) .
-             "</font></p>
-             </td>" .
-             "<td width='10%'>&nbsp;</td>" .
-             "<td width='45%' align='left'>
-             <p><font face='Verdana' size='2'><b>R.U.C.</b> " . $retencion['ruc'] . "</font></p>
+            "<table border='0' width='100%'>" .
+            "<tr>" .
+            "<td width='45%' align='center'>
+            <img src='img/pys-logo.gif'><p><font face='Verdana' size='2'><b>" . utf8_decode($retencion['razonSocial']) .
+            "</b></font></p><p><font face='Verdana' size='1'><b>Matriz: </b>" . utf8_decode($retencion['dirMatriz']) .
+            "</font></p>
+            </td>" .
+            "<td width='10%'>&nbsp;</td>" .
+            "<td width='45%' align='left'>
+            <p><font face='Verdana' size='2'><b>R.U.C.</b> " . $retencion['ruc'] . "</font></p>
 	     		 	<p><font face='Verdana' size='2'>COMPROBANTE DE RETENCI&Oacute;N</font></p>
 	     		 	<p><font face='Verdana' size='2'>No. " . $retencion['estab']  . "-" . $retencion['ptoEmi'] . "-" . $retencion['secuencial'] ."</font>
 
              <p><font face='Verdana' size='1'>AMBIENTE: ".($retencion['ambiente']==2?"PRODUCCI&Oacute;N":"PRUEBAS")."</font></p>
                    <p><font face='Verdana' size='1'>EMISI&Oacute;N: ".$emision."</font></p>
 	     		 	<p><font face='Verdana' size='1'>CLAVE DE ACCESO<br>". $retencion['claveAcceso'] . "</font></td>" .
-             "</tr>" .
-             "</table><br>" .
-             "<table border='0' width='100%'>" .
-             "<tr><td colspan='2'><font face='Verdana' size='2'><b>Raz&oacute;n Social/Nombres Apellidos: </b>" . utf8_decode($retencion['razonSocialSujetoRetenido']) . "</font></td></tr>" .
-             "<tr><td><font face='Verdana' size='2'><b>RUC: </b>" . $retencion['identificacionSujetoRetenido'] . "</font>" .
-             "<td><font face='Verdana' size='2'><b>Fecha de Emisi&oacute;n: </b>" . date('d-m-Y', strtotime($retencion['fechaEmision'])) . "</font></td></tr>" .
-             "</table><br>" .
-             "<table border='0' width='100%' class='detalle'>" .
-             "<tr><th><font face='Verdana' size='1'><b>Comprobante</b></th>" .
-             "<th ><font face='Verdana' size='1'><b>N&uacute;mero</b></font></th>" .
-             "<th ><font face='Verdana' size='1'><b>Fecha emisi&oacute;n</b></font></th>" .
-             "<th ><font face='Verdana' size='1'><b>Ejercicio Fiscal</b></font></th>".
-             "<th ><font face='Verdana' size='1'><b>Base imponible</b></font></th>".
-             "<th ><font face='Verdana' size='1'><b>Impuesto</b></font></th>".
-             "<th ><font face='Verdana' size='1'><b>Porcentaje retenci&oacute;n</b></font></th>".
-             "<th ><font face='Verdana' size='1'><b>Valor retenido</b></font></th></tr>";
-             $total = 0;
-				 foreach ($detalle as $key => $value) {
+            "</tr>" .
+            "</table><br>" .
+            "<table border='0' width='100%'>" .
+            "<tr><td colspan='2'><font face='Verdana' size='2'><b>Raz&oacute;n Social/Nombres Apellidos: </b>" . utf8_decode($retencion['razonSocialSujetoRetenido']) . "</font></td></tr>" .
+            "<tr><td><font face='Verdana' size='2'><b>RUC: </b>" . $retencion['identificacionSujetoRetenido'] . "</font>" .
+            "<td><font face='Verdana' size='2'><b>Fecha de Emisi&oacute;n: </b>" . date('d-m-Y', strtotime($retencion['fechaEmision'])) . "</font></td></tr>" .
+            "</table><br>" .
+            "<table border='0' width='100%' class='detalle'>" .
+            "<tr><th><font face='Verdana' size='1'><b>Comprobante</b></th>" .
+            "<th ><font face='Verdana' size='1'><b>N&uacute;mero</b></font></th>" .
+            "<th ><font face='Verdana' size='1'><b>Fecha emisi&oacute;n</b></font></th>" .
+            "<th ><font face='Verdana' size='1'><b>Ejercicio Fiscal</b></font></th>".
+            "<th ><font face='Verdana' size='1'><b>Base imponible</b></font></th>".
+            "<th ><font face='Verdana' size='1'><b>Impuesto</b></font></th>".
+            "<th ><font face='Verdana' size='1'><b>Porcentaje retenci&oacute;n</b></font></th>".
+            "<th ><font face='Verdana' size='1'><b>Valor retenido</b></font></th></tr>";
+        $total = 0;
+        foreach ($detalle as $key => $value) {
+//            print_r($value->codigoRetencion);
+            $descripcionRetencion = $value->codigo == 1 ? Catalogo::where("cat_referencia","=",$value->codigoRetencion)->where("cat_codigo_padre","=","06")->get()->first()->cat_descripcion : Catalogo::where("cat_referencia","=",$value->codigoRetencion)->where("cat_codigo_padre","=","05")->get()->first()->cat_descripcion;
 
-                     $descripcionRetencion = $value->codigo == 1 ? Catalogo::where("cat_referencia","=",$value->codigoRetencion)->where("cat_codigo_padre","=","06")->get()->first()->cat_descripcion : Catalogo::where("cat_referencia","=",$value->codigoRetencion)->where("cat_codigo_padre","=","05")->get()->first()->cat_descripcion; 
+            $html .= "<tr><td align='left'><font face='Verdana' size='2'>" . utf8_decode($value->codDocSustento=='01'?'Factura':'') . "</font></td>" .
+                "<td align='right'><font face='Verdana' size='2'>" . $value->numDocSustento . "</font></td>" .
+                "<td align='right'><font face='Verdana' size='2'>" . date('d/m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
+                "<td align='right'><font face='Verdana' size='2'>" . date('m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
+                "<td align='right'><font face='Verdana' size='2'>" . number_format($value->baseImponible, "2") . "</font></td>" .
+                "<td align='right'><font face='Verdana' size='2'>" . $descripcionRetencion . "</font></td>" .
+                "<td align='right'><font face='Verdana' size='2'>" . number_format($value->porcentajeRetener, "2") . "</font></td>" .
+                "<td align='right'><font face='Verdana' size='2'>" . number_format($value->valorRetenido, "2") . "</font></td></tr>";
+            $total+=$value->valorRetenido;
 
-                     $html .= "<tr><td align='left'><font face='Verdana' size='2'>" . utf8_decode($value->codDocSustento=='01'?'Factura':'') . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . $value->numDocSustento . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . date('d/m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . date('m/Y', strtotime($value->fechaEmisionDocSustento)) . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . number_format($value->baseImponible, "2") . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . $descripcionRetencion . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . number_format($value->porcentajeRetener, "2") . "</font></td>" .
-                         "<td align='right'><font face='Verdana' size='2'>" . number_format($value->valorRetenido, "2") . "</font></td></tr>";
-                         $total+=$value->valorRetenido;
-                 }
+        }
+
         $html.="<tr><td colspan='7' align='right'><font face='Verdana' size='2'><b>TOTAL</b></font></td><td align='right'><font face='Verdana' size='2'><b>".number_format($total, "2")."</b></font></td></tr>";
-	     $html.= "</table>";
+        $html.= "</table>";
 
         $html.="<br/><br/><div class='informacion-adicional'>
             <table style='width:100%'>
@@ -424,17 +427,17 @@ class RetencionesController extends \BaseController {
             <tr><td style='width: 30%'>Tel&eacute;fono</td><td style='width: 70%'>022523851</td></tr>
             </table>
         </div>";
-	     if ($retencion['estado'] != 'NUEVA') {
-             $html.= "<p><font face='Verdana' size='4'>" .  $retencion['estado'] . "</font></p>";
-         }
-	     
+        if ($retencion['estado'] != 'NUEVA') {
+            $html.= "<p><font face='Verdana' size='4'>" .  $retencion['estado'] . "</font></p>";
+        }
 
-	     $html.= '</body></html>';
 
-	     //return PDF::load($html, 'A4', 'portrait')->show();
-	     PDF::load($html, 'A4', 'portrait')->download($retencion['claveAcceso']);
+        $html.= '</body></html>';
 
-	}
+        //return PDF::load($html, 'A4', 'portrait')->show();
+        PDF::load($html, 'A4', 'portrait')->download($retencion['claveAcceso']);
+
+    }
 
 
 }

@@ -38,6 +38,19 @@ Route::get('reportes', array('uses' => 'HomeController@doReports'));
 
 Route::get('catalogo/createCategoria', array('uses' => 'CatalogoController@createCategoria'));
 
+
+Route::get('reporte-facturas', array('uses' => 'ReportesController@facturas'));
+Route::get('reporte-retenciones', array('uses' => 'ReportesController@retenciones'));
+Route::get('reporte-notas', array('uses' => 'ReportesController@notasDeCredito'));
+Route::post('reportes/tablaFacturas', array('uses' => 'ReportesController@tablaFacturas'));
+Route::get('reportes/facturasPdf', array('uses' => 'ReportesController@facturasPdf'));
+Route::post('reportes/tablaRetenciones', array('uses' => 'ReportesController@tablaRetenciones'));
+Route::get('reportes/tablaRetenciones', array('uses' => 'ReportesController@tablaRetenciones'));
+Route::get('reportes/retencionesPdf', array('uses' => 'ReportesController@retencionesPdf'));
+Route::post('reportes/tablaNotas', array('uses' => 'ReportesController@tablaNotas'));
+Route::get('reportes/notasPdf', array('uses' => 'ReportesController@notasPdf'));
+
+
 Route::group(array('before' => 'auth'), function(){
 	Route::resource('emisor', 'EmisorController');
 	Route::resource('cliente', 'ClienteController');

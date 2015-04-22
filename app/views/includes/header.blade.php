@@ -56,6 +56,7 @@
 											<li><a href="{{ URL::to('nota-debito') }}">Guía de remisión</a></li>
 											<li><a href="{{ URL::to('factura-intereses') }}">Facturar Intereses</a></li>
 										</ul>
+
 										<h4>Configuraciones</h4>
 										<ul>
 											<li><a href="{{ URL::to('catalogo') }}">Catálogo</a></li>	
@@ -65,6 +66,14 @@
 											<li><a href="{{ URL::to('logout') }}">Logout</a></li>
 										</ul>
 									</div>
+                                    <div>
+                                        <h4>Reportes</h4>
+                                        <ul>
+                                            <li><a href="{{ URL::to('reporte-facturas')}}">Facturas</a></li>
+                                            <li><a href="{{ URL::to('reporte-retenciones')}}">Retenciones</a></li>
+                                            <li><a href="{{ URL::to('reporte-notas')}}">Notas de crédito</a></li>
+                                        </ul>
+                                    </div>
 								</div><!-- /mainmenu-submenu-inner -->
 							</div><!-- /mainmenu-submenu -->
 						</li>

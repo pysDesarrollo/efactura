@@ -122,6 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Thujohn\Pdf\PdfServiceProvider',
+        'Anouar\Fpdf\FpdfServiceProvider',
 
 	),
 
@@ -190,7 +191,7 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 		'PDF'			    => 'Thujohn\Pdf\PdfFacade',
-
+        'Fpdf'    => 'Anouar\Fpdf\Fpdf',
 	),
 
 );
