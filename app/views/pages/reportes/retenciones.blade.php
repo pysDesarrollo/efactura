@@ -63,6 +63,8 @@
 
     $("#ver").click(function(){
         if($("#desde").val()!="" && $("#hasta").val()!=""){
+            $("#tabla").html()
+            openLoader();
             $.ajax({
                 type: 'POST',
                 url: '{{URL::to("reportes/tablaRetenciones")}}',
@@ -71,6 +73,7 @@
                     hasta:$("#hasta").val()
                 }
             }).success(function(data){
+                closeLoader()
                 $("#tabla").show("slide").html(data)
             });
         }else{

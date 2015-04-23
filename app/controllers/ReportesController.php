@@ -11,7 +11,7 @@ class ReportesController extends \BaseController {
     public function tablaFacturas(){
         $desde = date('Y-m-d', strtotime(Input::get("desde")));
         $hasta = date('Y-m-d', strtotime(Input::get("hasta")));
-        $facturas = Documento::where("fechaEmision",">",$desde)->where("fechaEmision","<",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
+        $facturas = Documento::where("fechaEmision",">=",$desde)->where("fechaEmision","<=",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
 //        dd($facturas);
         return View::make('pages.reportes.tablaFacturas')->with("desde",$desde)->with("hasta",$hasta)->with("facturas",$facturas);
     }
@@ -21,7 +21,7 @@ class ReportesController extends \BaseController {
         $desde = date('Y-m-d', strtotime(Input::get("desde")));
         $hasta = date('Y-m-d', strtotime(Input::get("hasta")));
         $emisor = Emisor::find(1);
-        $facturas = Documento::where("fechaEmision",">",$desde)->where("fechaEmision","<",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
+        $facturas = Documento::where("fechaEmision",">=",$desde)->where("fechaEmision","<=",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
 
         $columnas = ["#","Fecha emisión","Fecha autorización","Estado","Ruc","Número","Valor","IVA","Total"];
         $pdf = new \App\library\ReportesPdf();
@@ -72,7 +72,7 @@ class ReportesController extends \BaseController {
     public function tablaRetenciones(){
         $desde = date('Y-m-d', strtotime(Input::get("desde")));
         $hasta = date('Y-m-d', strtotime(Input::get("hasta")));
-        $retenciones = Retencion::where("fechaEmision",">",$desde)->where("fechaEmision","<",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
+        $retenciones = Retencion::where("fechaEmision",">=",$desde)->where("fechaEmision","<=",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
         $datos = [];
 
         foreach($retenciones as $retencion){
@@ -103,7 +103,7 @@ class ReportesController extends \BaseController {
 //        phpinfo();
         $desde = date('Y-m-d', strtotime(Input::get("desde")));
         $hasta = date('Y-m-d', strtotime(Input::get("hasta")));
-        $retenciones = Retencion::where("fechaEmision",">",$desde)->where("fechaEmision","<",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
+        $retenciones = Retencion::where("fechaEmision",">=",$desde)->where("fechaEmision","<=",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
         $emisor = Emisor::find(1);
 
         $columnas = ["#","Fecha emisión","Estado","Ruc","Número","# Factura","Total"];
@@ -115,7 +115,9 @@ class ReportesController extends \BaseController {
         $pdf->setColumnas($columnas,[8,40,25,30,30,30,20,15,20]);
         $i=0;
         $total=0;
+        $totalFinal = 0;
         foreach($retenciones as $retencion){
+            $total=0;
             $i++;
             $detalles=DetalleRetencion::where("id","=",$retencion["id"])->get()->toArray();
             foreach($detalles as $d){
@@ -131,6 +133,7 @@ class ReportesController extends \BaseController {
                 $factura,
                 number_format ( $total ,2 )
             ];
+            $totalFinal += $total;
             if($i%2==0)
                 $pdf->Row($tmp,$pdf->anchos,8,[0,0,0,0,0,0,1,1,1],true);
             else
@@ -138,7 +141,7 @@ class ReportesController extends \BaseController {
 
         }
 
-        $datos=["","","","","","Total",number_format ($total ,2 )];
+        $datos=["","","","","","Total",number_format ($totalFinal ,2 )];
         $i++;
         $pdf->SetFont('Arial','B',8);
         if($i%2==0)
@@ -159,7 +162,7 @@ class ReportesController extends \BaseController {
     public function tablaNotas(){
         $desde = date('Y-m-d', strtotime(Input::get("desde")));
         $hasta = date('Y-m-d', strtotime(Input::get("hasta")));
-        $notas = NotaCredito::where("fechaEmision",">",$desde)->where("fechaEmision","<",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
+        $notas = NotaCredito::where("fechaEmision",">=",$desde)->where("fechaEmision","<=",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
 
 
         return View::make('pages.reportes.tablaNotas')->with("desde",$desde)->with("hasta",$hasta)->with("notas",$notas);
@@ -169,7 +172,7 @@ class ReportesController extends \BaseController {
         $desde = date('Y-m-d', strtotime(Input::get("desde")));
         $hasta = date('Y-m-d', strtotime(Input::get("hasta")));
         $emisor = Emisor::find(1);
-        $notas = NotaCredito::where("fechaEmision",">",$desde)->where("fechaEmision","<",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
+        $notas = NotaCredito::where("fechaEmision",">=",$desde)->where("fechaEmision","<=",$hasta)->orderBy('fechaEmision')->get()->toArray() ;
 
         $columnas = ["#","Fecha emisión","Fecha autorización","Estado","Ruc","Número","# Factura","Valor","IVA","Total"];
         $pdf = new \App\library\ReportesPdf();

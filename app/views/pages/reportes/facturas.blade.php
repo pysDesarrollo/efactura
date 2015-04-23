@@ -45,13 +45,14 @@
             </div>
         </div>
         <div class="row" style="margin-top: 20px">
-            <div class="col-md-12" id="tabla">
+            <div class="col-md-12" id="tabla" style="position: relative;min-height: 250px">
 
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+
     $(".datepicker").datepicker({
         format: "yyyy-mm-dd",
         todayHighlight:true,
@@ -63,14 +64,18 @@
 
     $("#ver").click(function(){
         if($("#desde").val()!="" && $("#hasta").val()!=""){
+            $("#tabla").html()
+            openLoader();
             $.ajax({
                 type: 'POST',
                 url: '{{URL::to("reportes/tablaFacturas")}}',
                 data: {
+
                     desde:$("#desde").val(),
                     hasta:$("#hasta").val()
                 }
             }).success(function(data){
+                closeLoader();
                 $("#tabla").show("slide").html(data)
             });
         }else{

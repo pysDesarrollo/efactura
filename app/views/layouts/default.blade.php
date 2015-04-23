@@ -59,6 +59,30 @@
     <script src="{{ URL::to('/') }}/js/plugins/bootstrap-switch-master/dist/js/bootstrap-switch.min.js"></script>
     <link rel="stylesheet" href="{{ URL::to('/') }}/js/plugins/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" />
     @yield('header')
+    <script type="text/javascript">
+        var img ='<img id="loading"   style="margin-left: 90px" src="{{URL::to("/") }}/img/download.GIF">'
+        var dialog
+        function openLoader(){
+           dialog= bootbox.dialog({
+                message: img,
+                title: "Cargando, espere por favor",
+                size:"small",
+                closeButton:false,
+                className : "loading",
+               class:"loading",
+                buttons: {
+
+                }
+            });
+        }
+
+        function closeLoader(){
+//            dialog.hide()
+//            bootbox.hideAll()
+            dialog.modal("hide")
+        }
+
+    </script>
 </head>
 <body>
 <!--[if lt IE 7]>
