@@ -26,7 +26,8 @@
         "Illuminate\\Validation\\ValidationServiceProvider",
         "Illuminate\\View\\ViewServiceProvider",
         "Illuminate\\Workbench\\WorkbenchServiceProvider",
-        "Thujohn\\Pdf\\PdfServiceProvider"
+        "Thujohn\\Pdf\\PdfServiceProvider",
+        "Anouar\\Fpdf\\FpdfServiceProvider"
     ],
     "eager": [
         "Illuminate\\Cookie\\CookieServiceProvider",
@@ -36,7 +37,8 @@
         "Illuminate\\Session\\SessionServiceProvider",
         "Illuminate\\View\\ViewServiceProvider",
         "Illuminate\\Workbench\\WorkbenchServiceProvider",
-        "Thujohn\\Pdf\\PdfServiceProvider"
+        "Thujohn\\Pdf\\PdfServiceProvider",
+        "Anouar\\Fpdf\\FpdfServiceProvider"
     ],
     "deferred": {
         "artisan": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
