@@ -37,16 +37,34 @@ class HomeController extends BaseController {
 				->withInput(Input::all());
 		} else {
 			//$auth = User::where('usu_ruc', '=', Input::get('username'))->where('password', '=', Hash::make(Input::get('password')))->first();
-			$auth = User::where('usu_ruc', '=', Input::get('username'))->where('password', '=', Input::get('password'))->first();
-			
-        	if($auth){
-            	Auth::login($auth);
-            	return Redirect::to('/');
-        	}
-        	else
-        	{
-            	return Redirect::to('login');
-        	}
+//			$auth = User::where('usu_ruc', '=', Input::get('username'))->where('password', '=', Input::get('password'))->first();
+            $user = User::where('usu_ruc', '=', Input::get('username'))->first();
+            if(isset($user)) {
+                if($user->password == Input::get('password')) { // If their password is still MD5
+                    $user->password = Hash::make(Input::get('password')); // Convert to new format
+                    $user->save();
+                    Auth::login($user);
+                    return Redirect::to('/');
+                }else{
+
+                    if(Hash::check(Input::get('password'),Hash::make(Input::get('password')))) {
+                        Auth::login($user);
+            	        return Redirect::to('/');
+                    }else{
+                        return Redirect::to('login');
+                    }
+                }
+            }else{
+                return Redirect::to('login');
+            }
+//        	if($auth){
+//            	Auth::login($auth);
+//            	return Redirect::to('/');
+//        	}
+//        	else
+//        	{
+//            	return Redirect::to('login');
+//        	}
 		}
 	}
 
