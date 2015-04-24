@@ -106,23 +106,25 @@ class RetencionesController extends \BaseController {
                     $retencion->save();
 
                     //Ingresa retención en la fuente
-                    $detalleretencion = new DetalleRetencion;
-                    $detalleretencion->id = $retencion->id;
-                    $detalleretencion->ruc = $cliente[0]->emi_ruc;
-                    $detalleretencion->estab = $datos['doc_estab'];
-                    $detalleretencion->ptoEmi = $datos['doc_ptoemi'];
-                    $detalleretencion->secuencial = str_pad($datos['doc_num'], 9, '0', STR_PAD_LEFT);
-                    $detalleretencion->codigo = 1;
-                    $detalleretencion->codigoRetencion = $value->codigo_retencion;
-                    $detalleretencion->baseImponible = $value->valor_factura;
-                    $detalleretencion->porcentajeRetener = $value->porcentaje_retencion;
-                    $detalleretencion->valorRetenido = $value->valor_retencion;
-                    $detalleretencion->codDocSustento = "01"; //Factura
-                    $detalleretencion->numDocSustento = $value->num_factura;
-                    $detalleretencion->fechaEmisionDocSustento = date('Y-m-d', strtotime($value->fecha_documento));
-                    $detalleretencion->num_compra = $datos['doc_num'];
-                    $detalleretencion->save();
-
+                    if (!is_null($value->codigo_retencion)) {
+                        $detalleretencion = new DetalleRetencion;
+                        $detalleretencion->id = $retencion->id;
+                        $detalleretencion->ruc = $cliente[0]->emi_ruc;
+                        $detalleretencion->estab = $datos['doc_estab'];
+                        $detalleretencion->ptoEmi = $datos['doc_ptoemi'];
+                        $detalleretencion->secuencial = str_pad($datos['doc_num'], 9, '0', STR_PAD_LEFT);
+                        $detalleretencion->codigo = 1;
+                        $detalleretencion->codigoRetencion = $value->codigo_retencion;
+                        $detalleretencion->baseImponible = $value->valor_factura;
+                        $detalleretencion->porcentajeRetener = $value->porcentaje_retencion;
+                        $detalleretencion->valorRetenido = $value->valor_retencion;
+                        $detalleretencion->codDocSustento = "01"; //Factura
+                        $detalleretencion->numDocSustento = $value->num_factura;
+                        $detalleretencion->fechaEmisionDocSustento = date('Y-m-d', strtotime($value->fecha_documento));
+                        $detalleretencion->num_compra = $datos['doc_num'];
+                        $detalleretencion->save();
+                    }
+                    
                     //Ingresa retención IVA
                     if (!is_null($value->codigo_iva)) {
                         $detalleretencion = new DetalleRetencion;
