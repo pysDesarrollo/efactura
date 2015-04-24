@@ -114,14 +114,17 @@ class ReportesController extends \BaseController {
         $pdf->AddPage();
         $pdf->setColumnas($columnas,[8,40,25,30,30,30,20,15,20]);
         $i=0;
+        $totalgeneral=0;
         $total=0;
         $totalFinal = 0;
         foreach($retenciones as $retencion){
             $total=0;
             $i++;
+            
             $detalles=DetalleRetencion::where("id","=",$retencion["id"])->get()->toArray();
             foreach($detalles as $d){
                 $total+=$d["valorRetenido"];
+                $totalgeneral+=$total;
                 $factura = $d["numDocSustento"];
             }
             $tmp=[

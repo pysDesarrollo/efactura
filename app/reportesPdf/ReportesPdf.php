@@ -88,7 +88,7 @@ class ReportesPdf extends Fpdf {
     function Header()
     {
         // Logo
-        $this->Image($_SERVER['DOCUMENT_ROOT'].'/img/logo-pdf-header.png',10,13,50);
+        $this->Image($_SERVER['DOCUMENT_ROOT'].'/efactura/img/logo-pdf-header.png',10,13,50);
         // Arial bold 15
         $this->SetFont('Arial','',10);
         $this->Cell(75);
