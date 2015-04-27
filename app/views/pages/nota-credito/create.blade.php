@@ -54,6 +54,21 @@
 
 </script>
 
+
+ <nav class="navbar navbar-inverse">
+    <ul class="nav navbar-nav">
+    	<li>
+            <a href="{{  URL::to('nota-credito') }}" class="a-header">
+                <i class="fa fa-list-ul"></i> Ver Listado
+            </a>
+        </li>
+        <li><a href="{{ URL::to('nota-credito/create') }}" class="a-header">
+        	<i class="fa fa-plus-square"></i> Nueva
+        </a>
+        </li>
+    </ul>
+</nav>
+
 <div class="section">
 
 	<?php
@@ -193,13 +208,6 @@
 			<div class="col-sm-8">
 				{{ Form::submit('Grabar', array('class' => 'btn btn-primary')) }}
 			</div>
-			<div class="col-sm-2 pull-right">
-				<a href="{{URL::to('nota-credito/create')}}">Nueva</a>
-			</div>
-			<div class="col-sm-2 pull-right">
-				<a href="{{URL::to('nota-credito')}}">Ver Listado</a>
-			</div>
-
 		</div>	
 		
 		{{ Form::close() }}

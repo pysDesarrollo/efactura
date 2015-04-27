@@ -109,6 +109,7 @@ class NotaCreditoController extends \BaseController {
 			$notacredito->codDocModificado = "01";
 			$notacredito->numDocModificado = $factura['estab'] . '-' . $factura['ptoEmi'] . '-' . $factura['secuencial'];
 			$notacredito->valorModificacion = $factura['importeTotal'];
+			$notacredito->motivo = 'ANULACION';
 
 			$notacredito->save();
 
