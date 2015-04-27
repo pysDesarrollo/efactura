@@ -33,7 +33,9 @@ class RetencionesController extends \BaseController {
 
             //Coge los valores de intereses para generar facturas
             $retenciones = DatoRetencion::where('mes_codigo', '=', Input::get('fecha_proceso'))
-                ->where('estado', '=', 'POR FACTURAR')->get();
+                ->where('estado', '=', 'POR FACTURAR')
+                ->orderBy('com_numero', 'asc')
+                ->get();
 
             foreach ($retenciones as $key => $value) {
                 //Busca si existe el cliente/proveedor
@@ -97,6 +99,7 @@ class RetencionesController extends \BaseController {
                     $retencion->tipoIdentificacionSujetoRetenido = $cliente[0]->cat_codigo_padre;
                     $retencion->razonSocialSujetoRetenido = $cliente[0]->cli_nombres_apellidos;
                     $retencion->identificacionSujetoRetenido = $value->ruc_beneficiario;
+                    $retencion->motivo = 'ANULADA';
                     $retencion->periodoFiscal = date('Y-m-d', strtotime($value->fecha_crea));
                     $retencion->totalDescuento = 0;
                     $retencion->campoAdicional_emailCliente = is_null($cliente[0]->cli_email) ? $cliente[0]->emi_email : $cliente[0]->cli_email;
