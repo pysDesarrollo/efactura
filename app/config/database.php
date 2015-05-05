@@ -54,11 +54,12 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => '190.107.66.50',
-//            'host'      => 'localhost',
+//			'host'      => '190.107.66.50',
+            'host'      => 'localhost',
             'database'  => 'efactura',
 			'username'  => 'root',
-			'password'  => 'eldia2k',
+			'password'  => '',
+//			'password'  => 'eldia2k',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

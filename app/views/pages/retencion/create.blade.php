@@ -56,7 +56,7 @@
                     <span class="input-group-addon bg-info" id="num">
                         {{$secuencia->sec_estab}} - {{$secuencia->sec_ptoemi}}
                      </span>
-                    <input type="text" class="form-control input-sm required" name="secuecial" aria-describedby="num" value="{{$secuencia->sec_final+1}}" readonly>
+                    <input type="text" class="form-control input-sm required" name="secuecial" aria-describedby="num" value="{{$secuencia->sec_final}}" readonly>
                 </div>
             </div>
 
