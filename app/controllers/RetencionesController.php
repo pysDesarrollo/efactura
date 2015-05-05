@@ -205,6 +205,7 @@ class RetencionesController extends \BaseController {
         $emisor = Emisor::find(1);
         $secuencia = SecuenciaDocumento::where('sec_tipo_documento','=','RT')->where('sec_estado','=','A')->get()->first();
         $cliente = Cliente::find(Input::get('idcliente'));
+        $tipoIdentificacion = Catalogo::find($cliente->cli_tipo_identificacion);
 
         $retencion = new Retencion();
         $retencion->ambiente = $emisor->emi_tipo_ambiente;
@@ -224,7 +225,7 @@ class RetencionesController extends \BaseController {
         $retencion->dirMatriz = $emisor->emi_direccion_matriz;;
         $retencion->fechaEmision = date('Y-m-d', strtotime(Input::get('fechaEmision')));
         $retencion->obligadoContabilidad = $emisor->emi_obligado_llevar_contabilidad ;
-        $retencion->tipoIdentificacionSujetoRetenido = $cliente->cli_tipo_identificacion;
+        $retencion->tipoIdentificacionSujetoRetenido = $tipoIdentificacion->cat_referencia;
         $retencion->razonSocialSujetoRetenido = $cliente->cli_nombres_apellidos;
         $retencion->identificacionSujetoRetenido = $cliente->cli_identificacion;
         $retencion->periodoFiscal =  Input::get('fechaEmision');
