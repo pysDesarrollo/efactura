@@ -99,7 +99,7 @@ class RetencionesController extends \BaseController {
                     $retencion->tipoIdentificacionSujetoRetenido = $cliente[0]->cat_codigo_padre;
                     $retencion->razonSocialSujetoRetenido = $cliente[0]->cli_nombres_apellidos;
                     $retencion->identificacionSujetoRetenido = $value->ruc_beneficiario;
-                    $retencion->motivo = 'ANULADA';
+                    //$retencion->motivo = 'ANULADA';
                     $retencion->periodoFiscal = date('Y-m-d', strtotime($value->fecha_crea));
                     $retencion->totalDescuento = 0;
                     $retencion->campoAdicional_emailCliente = is_null($cliente[0]->cli_email) ? $cliente[0]->emi_email : $cliente[0]->cli_email;
@@ -211,6 +211,8 @@ class RetencionesController extends \BaseController {
         $retencion->tipoEmision = $emisor->emi_tipo_emision;
         $retencion->razonSocial = $emisor->emi_nombre;
         $retencion->nombreComercial = $emisor->emi_nombre_comercial;
+        $retencion->dirEstablecimiento = $emisor->emi_direccion_matriz;
+        $retencion->contribuyenteEspecial = $emisor->emi_nro_resolucion;
         $retencion->ruc = $emisor->emi_ruc;
         $datos = array("doc_fecha" => date('Y-m-d', strtotime(Input::get('fechaEmision'))), "doc_estab" => $secuencia->sec_estab,
             "doc_ptoemi" => $secuencia->sec_ptoemi, "doc_num" => $secuencia->sec_final);
@@ -221,8 +223,6 @@ class RetencionesController extends \BaseController {
         $retencion->secuencial=str_pad($secuencia->sec_final, 9, '0', STR_PAD_LEFT);
         $retencion->dirMatriz = $emisor->emi_direccion_matriz;;
         $retencion->fechaEmision = date('Y-m-d', strtotime(Input::get('fechaEmision')));
-        $retencion->dirEstablecimiento = $cliente->emi_direccion_matriz;
-        $retencion->contribuyenteEspecial = $cliente->emi_nro_resolucion;;
         $retencion->obligadoContabilidad = $emisor->emi_obligado_llevar_contabilidad ;
         $retencion->tipoIdentificacionSujetoRetenido = $cliente->cli_tipo_identificacion;
         $retencion->razonSocialSujetoRetenido = $cliente->cli_nombres_apellidos;
@@ -231,21 +231,28 @@ class RetencionesController extends \BaseController {
         $retencion->totalDescuento = 0;
         $retencion->campoAdicional_emailCliente = $cliente->cli_email;
         $retencion->campoAdicional_numeroCliente  = $cliente->id ;
-        $retencion->estado = $cliente->emi_estado_documento;
+        $retencion->estado = $emisor->emi_estado_documento;
         $retencion->num_compra = $secuencia->sec_final;
         $retencion->save();
 
         foreach($registros as $item){
             if($item!=""){
                 $datos = explode (";",$item);
+
+                
+
                 $catalogo = Catalogo::find($datos[0]);
+
+                //Busca el tipo de retención 1 --> Fuente 2 ---> Iva
+                $tipoRetencion = Catalogo::where('cat_codigo', '=', $catalogo->cat_codigo_padre)->get();
+                
                 $detalleretencion = new DetalleRetencion;
                 $detalleretencion->id = $retencion->id;
                 $detalleretencion->ruc = $emisor->emi_ruc;
                 $detalleretencion->estab = $secuencia->sec_estab;
                 $detalleretencion->ptoEmi =$secuencia->sec_ptoemi;
                 $detalleretencion->secuencial = str_pad($retencion->secuencial, 9, '0', STR_PAD_LEFT);
-                $detalleretencion->codigo = 1;
+                $detalleretencion->codigo = $tipoRetencion[0]->cat_referencia;
                 $detalleretencion->codigoRetencion = $catalogo->cat_referencia;
                 $detalleretencion->baseImponible =  floatval($datos[1]);
                 $detalleretencion->porcentajeRetener =  floatval($datos[2]);
@@ -262,14 +269,7 @@ class RetencionesController extends \BaseController {
         $secuencia->sec_final= $secuencia->sec_final+1;
         $secuencia->save();
 
-        //Actualiza en 1 el secuencial del documento
-        //$secuencia = SecuenciaDocumento::where('sec_tipo_documento','=','RT')->where('sec_estado','=','A')->get();
-        //$numero = $secuencia[0]->sec_final + 1;
-        //$id = $secuencia[0]->id;
-        //DB::update('update secuencia_documento set sec_final = ? where id = ?', array($numero, $id));
-
         return Redirect::to('retenciones');
-
     }
 
     /**
